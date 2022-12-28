@@ -1,4 +1,5 @@
 from collections import defaultdict
+from datetime import datetime
 import urllib.request
 import urllib.parse
 import re
@@ -168,6 +169,7 @@ if __name__ == "__main__":
     ])
     print(result_str)
     if OUT_FOLDER is not None:
-        OUT_FILE = OUT_FOLDER / f"collated_mastery.txt"
+        time_str = datetime.now().strftime("%Y-%m-%d_%Hh%M")
+        OUT_FILE = OUT_FOLDER / f"collated_mastery_{time_str}.txt"
         OUT_FILE.write_text(result_str)
         print(f"wrote to {OUT_FILE}")
