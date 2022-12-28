@@ -17,16 +17,9 @@ def load_summoner_page(username, region="EUW") -> str:
     return urllib.request.urlopen(target_url).read().decode("utf-8")
 
 
-def get_pre_rows_post(webpage):
-    """Takes a https://championmastery.gg/ lookup
-    page and returns the stuff before, table in the middle, and stuff after"""
-    pre_table, table_and_post = webpage.split('<tbody id="tbody">')
-    table, post_table = table_and_post.split("</tbody>")
-    return pre_table, table, post_table
-
-
-def get_stripped_table_rows(webpage):
-    _, result, _ = get_pre_rows_post(webpage)
+def get_stripped_table_rows(webpage) -> list[str]:
+    _, table_and_post = webpage.split('<tbody id="tbody">')
+    result, _ = table_and_post.split("</tbody>")
     regexes_to_kill = [
         # simple strs
         "\t",  # must kill tab first
