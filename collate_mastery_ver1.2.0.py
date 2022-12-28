@@ -13,7 +13,7 @@ def load_summoner_page(username, region="EUW"):
         "summoner": user_euw,
     })
     print(f"loading {target_url} ...")
-    result = urllib.request.urlopen(target_url, context=ssl.SSLContext(ssl.PROTOCOL_TLSv1))
+    result = urllib.request.urlopen(target_url)
     return result.read().decode("utf-8")  # assumptions
 
 
