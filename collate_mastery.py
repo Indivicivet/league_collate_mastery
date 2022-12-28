@@ -89,10 +89,7 @@ def combine_mastery_scores(*accounts):
     return res
 
 
-DISPLAY_VISUAL_DEFAULT = "-v" in sys.argv or "--visual" in sys.argv
-
-
-def prettify_score_list(scores, display_visual=DISPLAY_VISUAL_DEFAULT):
+def prettify_score_list(scores, display_visual=False):
     return "\n".join([
         f"{str(i + 1).ljust(4)} Lv{level} {champ.rjust(15)} {'X' * (points // 2000) or '.'}"
         if display_visual else
@@ -106,6 +103,9 @@ def prettify_score_list(scores, display_visual=DISPLAY_VISUAL_DEFAULT):
 
 
 if __name__ == "__main__":
+    # could package this nicer:
+    DISPLAY_VISUAL = "-v" in sys.argv or "--visual" in sys.argv
+
     USERNAMES_FILE = Path(__file__).parent / "usernames.txt"
     USERNAMES = (
         [
@@ -151,7 +151,7 @@ if __name__ == "__main__":
         for i in range(1, atleast_m[1] + 1)
     )
     time_str = datetime.now().strftime("%Y-%m-%d, %H:%M:%S")
-    result_str = f"""{prettify_score_list(combined_scores)}
+    result_str = f"""{prettify_score_list(combined_scores, display_visual=DISPLAY_VISUAL)}
 
 Total mastery: {total_points}
 
