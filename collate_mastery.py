@@ -142,6 +142,8 @@ if __name__ == "__main__":
         for x in range(1, 8)
     }
     atleast_m[7] = sum(1 for _, _, tokens in combined_scores.values() if tokens == 5)
+
+    time_str = datetime.now().strftime("%Y-%m-%d, %H:%M:%S")
     result_str = "\n".join([
         prettify_score_list(combined_scores),
         "",
@@ -166,10 +168,12 @@ if __name__ == "__main__":
             for i in range(1, atleast_m[1] + 1)
         ),
         "",
+        f"collated mastery as of {time_str}",
+        "",
     ])
     print(result_str)
     if OUT_FOLDER is not None:
-        time_str = datetime.now().strftime("%Y-%m-%d_%Hh%M")
-        OUT_FILE = OUT_FOLDER / f"collated_mastery_{time_str}.txt"
+        time_str_windows = datetime.now().strftime("%Y-%m-%d_%Hh%M")
+        OUT_FILE = OUT_FOLDER / f"collated_mastery_{time_str_windows}.txt"
         OUT_FILE.write_text(result_str)
         print(f"wrote to {OUT_FILE}")
