@@ -174,6 +174,7 @@ if __name__ == "__main__":
         else None
     )
     RESULT_STR = create_report(USERNAMES, display_visual=DISPLAY_VISUAL)
+    print()
     print(RESULT_STR)
     if OUT_FOLDER is not None:
         time_str_windows = datetime.now().strftime("%Y-%m-%d_%Hh%M")
