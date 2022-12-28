@@ -10,7 +10,7 @@ from pathlib import Path
 def load_summoner_page(username, region="EUW"):
     BASE_URL = "https://championmastery.gg/summoner?"
     target_url = BASE_URL + urllib.parse.urlencode({
-        "region": "EUW",
+        "region": region,
         "summoner": user_euw,
     })
     print(f"loading {target_url} ...")
