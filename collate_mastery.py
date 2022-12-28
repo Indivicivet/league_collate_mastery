@@ -2,7 +2,6 @@ from collections import defaultdict
 import urllib.request
 import urllib.parse
 import re
-import ssl
 import sys
 from pathlib import Path
 
