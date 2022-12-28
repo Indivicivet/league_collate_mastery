@@ -142,7 +142,19 @@ if __name__ == "__main__":
         for x in range(1, 8)
     }
     atleast_m[7] = sum(1 for _, _, tokens in combined_scores.values() if tokens == 5)
-
+    account_distribution_str = "\n".join(
+        f"{acc: <20}{points: <10}{(1000 * points) // total_points / 10}%"
+        for acc, points in sorted(account_points, key=lambda t: t[1], reverse=True)
+    )
+    champions_at_least_level_str = "\n".join(
+        f"M{i}: {atleast_m[i]}"
+        for i in reversed(range(1, 8))
+    )
+    levels_visualization_str = "".join(
+        str(next(n for n in reversed(range(1, 8)) if atleast_m[n] >= i))
+        + ("\n" if i % 10 == 0 else "")
+        for i in range(1, atleast_m[1] + 1)
+    )
     time_str = datetime.now().strftime("%Y-%m-%d, %H:%M:%S")
     result_str = "\n".join([
         prettify_score_list(combined_scores),
@@ -150,23 +162,13 @@ if __name__ == "__main__":
         f"Total mastery: {total_points}",
         "",
         "Per account:",
-    ] + [
-        f"{acc: <20}{points: <10}{(1000 * points) // total_points / 10}%"
-        for acc, points in sorted(account_points, key=lambda t: t[1], reverse=True)
-    ] + [
+        account_distribution_str,
         "",
         "Number of champions with each mastery level earned:",
-    ] + [
-        f"M{i}: {atleast_m[i]}"
-        for i in reversed(range(1, 8))
-    ] + [
+        champions_at_least_level_str,
         "",
         "This looks like:",
-        "".join(
-            str(next(n for n in reversed(range(1, 8)) if atleast_m[n] >= i))
-            + ("\n" if i % 10 == 0 else "")
-            for i in range(1, atleast_m[1] + 1)
-        ),
+        levels_visualization_str,
         "",
         f"collated mastery as of {time_str}",
         "",
