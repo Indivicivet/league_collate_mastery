@@ -52,7 +52,7 @@ def get_stripped_table_rows(webpage) -> list[str]:
     return re.sub(r"\s\s+", "\n", result).strip().split("\n")  # kill multiple linebreaks
 
 
-def get_mastery_scores(webpage):
+def get_mastery_scores(webpage) -> dict[str, tuple[int, int, int]]:
     rows = get_stripped_table_rows(webpage)
     champ_chunks = [rows[i:i + 4] for i in range(0, len(rows), 4)]
 
