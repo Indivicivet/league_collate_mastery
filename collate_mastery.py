@@ -18,6 +18,9 @@ def load_summoner_page(username, region="EUW") -> str:
 
 
 def get_stripped_table_rows(webpage) -> list[str]:
+    """
+    terrible hacky way to parse a webpage :)
+    """
     _, table_and_post = webpage.split('<tbody id="tbody">')
     result, _ = table_and_post.split("</tbody>")
     regexes_to_kill = [
