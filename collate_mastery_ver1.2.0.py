@@ -144,4 +144,3 @@ if __name__ == "__main__":
         + ("\n" if i % 10 == 0 else "")
         for i in range(1, atleast_m[1] + 1)
     ))
-    input("> ")
