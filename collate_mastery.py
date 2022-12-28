@@ -127,10 +127,10 @@ if __name__ == "__main__":
         if OUT_FOLDER_CONFIG_FILE.exists()
         else None
     )
-    user_scores = {}
-    for user_euw in USERNAMES:
-        page = load_summoner_page(user_euw)
-        user_scores[user_euw] = get_mastery_scores(page)
+    user_scores = {
+        user_euw: get_mastery_scores(load_summoner_page(user_euw))
+        for user_euw in USERNAMES
+    }
     combined_scores = combine_mastery_scores(*user_scores.values())
     total_points = sum(pts for _, pts, _ in combined_scores.values())
     account_points = [
