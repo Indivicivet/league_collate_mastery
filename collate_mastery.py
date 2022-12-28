@@ -11,7 +11,7 @@ def load_summoner_page(username, region="EUW"):
     BASE_URL = "https://championmastery.gg/summoner?"
     target_url = BASE_URL + urllib.parse.urlencode({
         "region": region,
-        "summoner": user_euw,
+        "summoner": username,
     })
     print(f"loading {target_url} ...")
     result = urllib.request.urlopen(target_url)
