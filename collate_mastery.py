@@ -121,6 +121,12 @@ if __name__ == "__main__":
         if USERNAMES_FILE.exists()
         else ["thebausffs"]  # example
     )
+    OUT_FOLDER_CONFIG_FILE = Path(__file__).parent / "out_folder.txt"
+    OUT_FOLDER = (
+        Path(OUT_FOLDER_CONFIG_FILE.read_text().strip())
+        if OUT_FOLDER_CONFIG_FILE.exists()
+        else None
+    )
     user_scores = {}
     for user_euw in USERNAMES:
         page = load_summoner_page(user_euw)
@@ -162,3 +168,7 @@ if __name__ == "__main__":
         "",
     ])
     print(result_str)
+    if OUT_FOLDER is not None:
+        OUT_FILE = OUT_FOLDER / f"collated_mastery.txt"
+        OUT_FILE.write_text(result_str)
+        print(f"wrote to {OUT_FILE}")
