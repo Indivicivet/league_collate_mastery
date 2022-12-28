@@ -5,6 +5,7 @@ import urllib.parse
 import re
 import sys
 from pathlib import Path
+from typing import Iterable
 
 
 def load_summoner_page(username, region="EUW") -> str:
@@ -102,29 +103,13 @@ def prettify_score_list(scores, display_visual=False):
     ])
 
 
-if __name__ == "__main__":
-    # could package this nicer:
-    DISPLAY_VISUAL = "-v" in sys.argv or "--visual" in sys.argv
-
-    USERNAMES_FILE = Path(__file__).parent / "usernames.txt"
-    USERNAMES = (
-        [
-            x
-            for x in USERNAMES_FILE.read_text().splitlines()
-            if x and x[0] != "#"
-        ]
-        if USERNAMES_FILE.exists()
-        else ["thebausffs"]  # example
-    )
-    OUT_FOLDER_CONFIG_FILE = Path(__file__).parent / "out_folder.txt"
-    OUT_FOLDER = (
-        Path(OUT_FOLDER_CONFIG_FILE.read_text().strip())
-        if OUT_FOLDER_CONFIG_FILE.exists()
-        else None
-    )
+def create_report(
+    usernames: Iterable[str],
+    display_visual: bool = False,
+) -> str:
     user_scores = {
         user_euw: get_mastery_scores(load_summoner_page(user_euw))
-        for user_euw in USERNAMES
+        for user_euw in usernames
     }
     combined_scores = combine_mastery_scores(*user_scores.values())
     total_points = sum(pts for _, pts, _ in combined_scores.values())
@@ -151,7 +136,7 @@ if __name__ == "__main__":
         for i in range(1, atleast_m[1] + 1)
     )
     time_str = datetime.now().strftime("%Y-%m-%d, %H:%M:%S")
-    result_str = f"""{prettify_score_list(combined_scores, display_visual=DISPLAY_VISUAL)}
+    return f"""{prettify_score_list(combined_scores, display_visual=display_visual)}
 
 Total mastery: {total_points}
 
@@ -166,9 +151,32 @@ This looks like:
 
 collated mastery as of {time_str}
 """
-    print(result_str)
+
+
+if __name__ == "__main__":
+    # could package this nicer:
+    DISPLAY_VISUAL = "-v" in sys.argv or "--visual" in sys.argv
+
+    USERNAMES_FILE = Path(__file__).parent / "usernames.txt"
+    USERNAMES = (
+        [
+            x
+            for x in USERNAMES_FILE.read_text().splitlines()
+            if x and x[0] != "#"
+        ]
+        if USERNAMES_FILE.exists()
+        else ["thebausffs"]  # example
+    )
+    OUT_FOLDER_CONFIG_FILE = Path(__file__).parent / "out_folder.txt"
+    OUT_FOLDER = (
+        Path(OUT_FOLDER_CONFIG_FILE.read_text().strip())
+        if OUT_FOLDER_CONFIG_FILE.exists()
+        else None
+    )
+    RESULT_STR = create_report(USERNAMES, display_visual=DISPLAY_VISUAL)
+    print(RESULT_STR)
     if OUT_FOLDER is not None:
         time_str_windows = datetime.now().strftime("%Y-%m-%d_%Hh%M")
         OUT_FILE = OUT_FOLDER / f"collated_mastery_{time_str_windows}.txt"
-        OUT_FILE.write_text(result_str)
+        OUT_FILE.write_text(RESULT_STR)
         print(f"wrote to {OUT_FILE}")
