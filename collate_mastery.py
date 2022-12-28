@@ -7,15 +7,14 @@ import sys
 from pathlib import Path
 
 
-def load_summoner_page(username, region="EUW"):
+def load_summoner_page(username, region="EUW") -> str:
     BASE_URL = "https://championmastery.gg/summoner?"
     target_url = BASE_URL + urllib.parse.urlencode({
         "region": region,
         "summoner": username,
     })
     print(f"loading {target_url} ...")
-    result = urllib.request.urlopen(target_url)
-    return result.read().decode("utf-8")  # assumptions
+    return urllib.request.urlopen(target_url).read().decode("utf-8")
 
 
 def get_pre_rows_post(webpage):
