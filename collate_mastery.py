@@ -63,6 +63,7 @@ def get_stripped_table_rows(webpage):
 def get_mastery_scores(webpage):
     rows = get_stripped_table_rows(webpage)
     champ_chunks = [rows[i:i + 4] for i in range(0, len(rows), 4)]
+
     def count_total_tokens(progress_to_next):
         """n/3 -> 2+n, n/2 -> n"""
         if "Max level" in progress_to_next:
@@ -73,6 +74,7 @@ def get_mastery_scores(webpage):
         if tok_max == "3":  # already M6
             return 2 + int(tok_have)
         return int(tok_have)
+
     return {
         champ_name: (int(level), int(points), count_total_tokens(progress))
         for champ_name, level, points, progress in champ_chunks
@@ -92,17 +94,17 @@ def combine_mastery_scores(*accounts):
     return res
 
 
-DISPLAY_VISUAL_DEFAULT = "-v" in sys.argv or "--visual" in sys.argv 
-    
+DISPLAY_VISUAL_DEFAULT = "-v" in sys.argv or "--visual" in sys.argv
+
 
 def prettify_score_list(scores, display_visual=DISPLAY_VISUAL_DEFAULT):
     return "\n".join([
-        f"{str(i + 1).ljust(4)} Lv{level} {champ.rjust(15)} {'X'*(points//2000) or '.'}"
+        f"{str(i + 1).ljust(4)} Lv{level} {champ.rjust(15)} {'X' * (points // 2000) or '.'}"
         if display_visual else
-        f"{str(i + 1).ljust(4)} Lv{level} {champ.ljust(15)}  Points {str(points).ljust(7)} {'*'*tokens}"
+        f"{str(i + 1).ljust(4)} Lv{level} {champ.ljust(15)}  Points {str(points).ljust(7)} {'*' * tokens}"
         for i, (champ, (level, points, tokens)) in enumerate(sorted(
             scores.items(),
-            key=lambda t:t[1][1],  # score
+            key=lambda t: t[1][1],  # score
             reverse=True,
         ))
     ])
@@ -134,21 +136,30 @@ if __name__ == "__main__":
         for x in range(1, 8)
     }
     atleast_m[7] = sum(1 for _, _, tokens in combined_scores.values() if tokens == 5)
-    print(prettify_score_list(combined_scores))
-    print()
-    print("Total mastery:", total_points)
-    print()
-    print("Per account:")
-    for acc, points in sorted(account_points, key=lambda t: t[1], reverse=True):
-        print(f"{acc: <20}{points: <10}{(1000 * points) // total_points / 10}%")
-    print()
-    print("Number of champions with each mastery level earned:")
-    for i in reversed(range(1, 8)):
-        print(f"M{i}: {atleast_m[i]}")
-    print()
-    print("This looks like:")
-    print("".join(
-        str(next(n for n in reversed(range(1, 8)) if atleast_m[n] >= i))
-        + ("\n" if i % 10 == 0 else "")
-        for i in range(1, atleast_m[1] + 1)
-    ))
+    result_str = "\n".join([
+        prettify_score_list(combined_scores),
+        "",
+        f"Total mastery: {total_points}"
+        "",
+        "Per account:",
+    ] + [
+        f"{acc: <20}{points: <10}{(1000 * points) // total_points / 10}%"
+        for acc, points in sorted(account_points, key=lambda t: t[1], reverse=True)
+    ] + [
+        "",
+        "Number of champions with each mastery level earned:",
+    ] + [
+        f"M{i}: {atleast_m[i]}"
+        for i in reversed(range(1, 8))
+    ] + [
+        "",
+        "This looks like:",
+        "".join(
+            str(next(n for n in reversed(range(1, 8)) if atleast_m[n] >= i))
+            + ("\n" if i % 10 == 0 else "")
+            for i in range(1, atleast_m[1] + 1)
+        ),
+        "",
+        "",
+    ])
+    print(result_str)
