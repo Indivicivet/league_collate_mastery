@@ -4,6 +4,7 @@ import urllib.parse
 import re
 import ssl
 import sys
+from pathlib import Path
 
 
 def load_summoner_page(username, region="EUW"):
@@ -108,9 +109,16 @@ def prettify_score_list(scores, display_visual=DISPLAY_VISUAL_DEFAULT):
 
 
 if __name__ == "__main__":
-    USERNAMES = [
-        "thebausffs"  # test
-    ]
+    USERNAMES_FILE = Path(__file__).parent / "usernames.txt"
+    USERNAMES = (
+        [
+            x
+            for x in USERNAMES_FILE.read_text().splitlines()
+            if x and x[0] != "#"
+        ]
+        if USERNAMES_FILE.exists()
+        else ["thebausffs"]  # example
+    )
     user_scores = {}
     for user_euw in USERNAMES:
         page = load_summoner_page(user_euw)
