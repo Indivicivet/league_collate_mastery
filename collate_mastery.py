@@ -139,7 +139,7 @@ if __name__ == "__main__":
     result_str = "\n".join([
         prettify_score_list(combined_scores),
         "",
-        f"Total mastery: {total_points}"
+        f"Total mastery: {total_points}",
         "",
         "Per account:",
     ] + [
@@ -159,7 +159,6 @@ if __name__ == "__main__":
             + ("\n" if i % 10 == 0 else "")
             for i in range(1, atleast_m[1] + 1)
         ),
-        "",
         "",
     ])
     print(result_str)
