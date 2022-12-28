@@ -156,23 +156,21 @@ if __name__ == "__main__":
         for i in range(1, atleast_m[1] + 1)
     )
     time_str = datetime.now().strftime("%Y-%m-%d, %H:%M:%S")
-    result_str = "\n".join([
-        prettify_score_list(combined_scores),
-        "",
-        f"Total mastery: {total_points}",
-        "",
-        "Per account:",
-        account_distribution_str,
-        "",
-        "Number of champions with each mastery level earned:",
-        champions_at_least_level_str,
-        "",
-        "This looks like:",
-        levels_visualization_str,
-        "",
-        f"collated mastery as of {time_str}",
-        "",
-    ])
+    result_str = f"""{prettify_score_list(combined_scores)}
+
+Total mastery: {total_points}
+
+Per account:
+{account_distribution_str}
+
+Number of champions with each mastery level earned:
+{champions_at_least_level_str}
+
+This looks like:
+{levels_visualization_str}
+
+collated mastery as of {time_str}
+"""
     print(result_str)
     if OUT_FOLDER is not None:
         time_str_windows = datetime.now().strftime("%Y-%m-%d_%Hh%M")
